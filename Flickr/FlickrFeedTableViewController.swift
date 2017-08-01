@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class FlickrFeedTableViewController: UITableViewController {
     
@@ -52,8 +53,10 @@ class FlickrFeedTableViewController: UITableViewController {
         
         let value = self.flickrPostItems[indexPath.row]
 
-        let url = URL(string: value.link)!
-        print(url)
+        let url = URL(string: value.media)!
+        
+        
+        cell.flickrPostImageView.kf.setImage(with: url)
 
         return cell
     }
@@ -158,11 +161,7 @@ class FlickrFeedTableViewController: UITableViewController {
                     newFlickrPost.media = jsonItem.value as! String
                 }
                 
-                print(newFlickrPost.link)
-                
                 flickrPostItems.append(newFlickrPost)
-                
-                
             }
             
         } catch {

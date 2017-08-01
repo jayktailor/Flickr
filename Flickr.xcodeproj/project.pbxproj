@@ -599,6 +599,7 @@
 				6CC8FF541F30AF6800B4D158 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6CC8FF551F30AF6800B4D158 /* Build configuration list for PBXNativeTarget "FlickrTests" */ = {
 			isa = XCConfigurationList;
@@ -607,6 +608,7 @@
 				6CC8FF571F30AF6800B4D158 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
