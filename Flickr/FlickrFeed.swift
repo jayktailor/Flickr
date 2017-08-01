@@ -8,16 +8,12 @@
 
 import Foundation
 
-class FlickrPostItem {
+class FlickrFeed {
     
     var title: String = ""
     var link: String = ""
-    var media: String = ""
-    var date_taken: String = ""
     var description: String = ""
-    var published: String = ""
-    var author: String = ""
-    var author_id: String = ""
-    var tags: String = ""
+    var modified: String = ""
+    var generator: String = ""
     
 }

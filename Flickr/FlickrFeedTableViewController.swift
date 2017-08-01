@@ -13,6 +13,7 @@ class FlickrFeedTableViewController: UITableViewController {
     // MARK: Variables
     let flickrURL = "https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1" // Raw JSON required with no function wrapper. Added nojsoncallback with value 1 (https://www.flickr.com/services/api/response.json.html)
     var flickrPostItems = [FlickrPostItem]()
+    var flickrFeedMetaData = FlickrFeed()
     
 
     // MARK: Table View Functions
@@ -21,6 +22,7 @@ class FlickrFeedTableViewController: UITableViewController {
         
         getFlickrData()
 
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -37,23 +39,25 @@ class FlickrFeedTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return flickrPostItems.count
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! FlickrFeedTableViewCell
+        
+        let value = self.flickrPostItems[indexPath.row]
 
-        // Configure the cell...
+        let url = URL(string: value.link)!
+        print(url)
 
         return cell
     }
-    */
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -110,6 +114,10 @@ class FlickrFeedTableViewController: UITableViewController {
             // Parse JSON data
             if let data = data {
                 self.flickrPostItems = self.parseJSONData(data: data)
+                
+                OperationQueue.main.addOperation({
+                    self.tableView.reloadData()
+                })
             }
         })
         
@@ -123,34 +131,39 @@ class FlickrFeedTableViewController: UITableViewController {
         do {
             let jsonResult = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary
             
-            let title = jsonResult?["title"] as! String
-            print(title)
+            flickrFeedMetaData.title = jsonResult?["title"] as! String
+            flickrFeedMetaData.link = jsonResult?["link"] as! String
+            flickrFeedMetaData.description = jsonResult?["description"] as! String
+            flickrFeedMetaData.modified = jsonResult?["modified"] as! String
+            flickrFeedMetaData.generator = jsonResult?["generator"] as! String
             
             
             let jsonItems = jsonResult?["items"] as! [AnyObject]
             for jsonItem in jsonItems {
                 
-                let title = jsonItem["title"] as! String
-                let link = jsonItem["link"] as! String
-                //                let media = jsonItem["media"] as! String
-                let date_taken = jsonItem["date_taken"] as! String
-                let description = jsonItem["description"] as! String
-                let published = jsonItem["published"] as! String
-                let author = jsonItem["author"] as! String
-                let author_id = jsonItem["author_id"] as! String
-                let tags = jsonItem["tags"] as! String
+                let media = jsonItem["media"] as! NSDictionary
                 
-                print(title)
-                print(link)
-                //                print(media)
-                print(date_taken)
-                print(description)
-                print(published)
-                print(author)
-                print(author_id)
-                print(tags)
+                let newFlickrPost = FlickrPostItem()
+                
+                newFlickrPost.title = jsonItem["title"] as! String
+                newFlickrPost.link = jsonItem["link"] as! String
+                newFlickrPost.date_taken = jsonItem["date_taken"] as! String
+                newFlickrPost.description = jsonItem["description"] as! String
+                newFlickrPost.published = jsonItem["published"] as! String
+                newFlickrPost.author = jsonItem["author"] as! String
+                newFlickrPost.author_id = jsonItem["author_id"] as! String
+                newFlickrPost.tags = jsonItem["tags"] as! String
+                
+                for jsonItem in media {
+                    newFlickrPost.media = jsonItem.value as! String
+                }
+                
+                print(newFlickrPost.link)
+                
+                flickrPostItems.append(newFlickrPost)
+                
+                
             }
-            
             
         } catch {
             print(error)

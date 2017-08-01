@@ -13,18 +13,32 @@
         <scene sceneID="Sda-Vb-NsB">
             <objects>
                 <tableViewController id="zm1-Av-0df" customClass="FlickrFeedTableViewController" customModule="Flickr" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Xdj-Rk-kug">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="300" sectionHeaderHeight="28" sectionFooterHeight="28" id="Xdj-Rk-kug">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="hYE-l0-L3r">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="300" id="hYE-l0-L3r" customClass="FlickrFeedTableViewCell" customModule="Flickr" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="300"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hYE-l0-L3r" id="ZD8-tB-a63">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l06-hY-G8S">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="299.5"/>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="l06-hY-G8S" secondAttribute="trailing" id="3TU-f4-FSf"/>
+                                        <constraint firstItem="l06-hY-G8S" firstAttribute="top" secondItem="ZD8-tB-a63" secondAttribute="top" id="Hg0-vj-ZCZ"/>
+                                        <constraint firstItem="l06-hY-G8S" firstAttribute="leading" secondItem="ZD8-tB-a63" secondAttribute="leading" id="nkc-Lu-aaZ"/>
+                                        <constraint firstAttribute="bottom" secondItem="l06-hY-G8S" secondAttribute="bottom" id="v7p-sP-K3D"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="flickrPostImageView" destination="l06-hY-G8S" id="acK-oG-KvD"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
