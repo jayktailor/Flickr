@@ -9,9 +9,17 @@
 import UIKit
 
 class FlickrFeedTableViewController: UITableViewController {
+    
+    // MARK: Variables
+    let flickrURL = "https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1" // Raw JSON required with no function wrapper. Added nojsoncallback with value 1 (https://www.flickr.com/services/api/response.json.html)
+    var flickrPostItems = [FlickrPostItem]()
+    
 
+    // MARK: Table View Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        getFlickrData()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -81,7 +89,76 @@ class FlickrFeedTableViewController: UITableViewController {
         return true
     }
     */
+    
+    
+    
+    // MARK: Functions
 
+    func getFlickrData(){
+        guard let url = URL(string: flickrURL) else {
+            return
+        }
+        
+        let request = URLRequest(url: url)
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) -> Void in
+            
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            // Parse JSON data
+            if let data = data {
+                self.flickrPostItems = self.parseJSONData(data: data)
+            }
+        })
+        
+        task.resume()
+    }
+    
+    func parseJSONData(data: Data) -> [FlickrPostItem] {
+        
+        var flickrPostItems = [FlickrPostItem]()
+        
+        do {
+            let jsonResult = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary
+            
+            let title = jsonResult?["title"] as! String
+            print(title)
+            
+            
+            let jsonItems = jsonResult?["items"] as! [AnyObject]
+            for jsonItem in jsonItems {
+                
+                let title = jsonItem["title"] as! String
+                let link = jsonItem["link"] as! String
+                //                let media = jsonItem["media"] as! String
+                let date_taken = jsonItem["date_taken"] as! String
+                let description = jsonItem["description"] as! String
+                let published = jsonItem["published"] as! String
+                let author = jsonItem["author"] as! String
+                let author_id = jsonItem["author_id"] as! String
+                let tags = jsonItem["tags"] as! String
+                
+                print(title)
+                print(link)
+                //                print(media)
+                print(date_taken)
+                print(description)
+                print(published)
+                print(author)
+                print(author_id)
+                print(tags)
+            }
+            
+            
+        } catch {
+            print(error)
+        }
+        
+        return flickrPostItems
+    }
+    
     /*
     // MARK: - Navigation
 
