@@ -170,12 +170,16 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
             }
             
         } catch {
-            print(error.localizedDescription)
             
+            // Show an alert if the
             let alertController = UIAlertController(title: "Could not retrive data", message: "Please check your network connection and try again", preferredStyle: .alert)
             let okayAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
             alertController.addAction(okayAction)
-            present(alertController, animated: true, completion: nil)
+            self.present(alertController, animated: true, completion: nil)
+            
+            print(error.localizedDescription)
+            
+            
         }
         
         return flickrPostItems
@@ -185,7 +189,7 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showFlickrPost" || segue.identifier == "showFlickrPostInfoButton" {
+        if segue.identifier == "showFlickrPost"{
             if let indexPath = tableView.indexPathForSelectedRow {
                 let value = self.flickrPostItems[indexPath.row]
                 
@@ -193,7 +197,6 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
                 
                 let destinationController = segue.destination as! FlickrPostDetailViewController
                 destinationController.flickrPostURL = url
-                
                 destinationController.flickrPost = value
             }
         }

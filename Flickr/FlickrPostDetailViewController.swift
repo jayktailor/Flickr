@@ -8,30 +8,34 @@
 
 import UIKit
 import Kingfisher
+import SafariServices
+import MessageUI
 
-class FlickrPostDetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class FlickrPostDetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate {
 
+    // MARK: View Controller Outlets
     @IBOutlet weak var flickrPostImageView: UIImageView!
     @IBOutlet weak var tableView: UITableView!
     
+    // MARK: Variables
     var flickrPostURL: URL?
-    
     var flickrPost = FlickrPostItem()
     
+    // MARK: Table View Functions
     override func viewDidLoad() {
         super.viewDidLoad()
 
         flickrPostImageView.kf.setImage(with: flickrPostURL)
         
-        print(flickrPost.author)
-        
         tableView.estimatedRowHeight = 50.0
         tableView.rowHeight = UITableViewAutomaticDimension
+        
+        // Set up the right button on the navigation bar
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionButtonTapped))
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -42,7 +46,7 @@ class FlickrPostDetailViewController: UIViewController, UITableViewDataSource, U
         let cellIdentifier = "Cell"
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! FlickrPostDetailTableViewCell
         
-        // Configure the cell...
+        // Populate the table with the image metadata
         switch indexPath.row {
         case 0:
             cell.fieldLabel.text = "Title"
@@ -81,15 +85,51 @@ class FlickrPostDetailViewController: UIViewController, UITableViewDataSource, U
         return cell
     }
     
+    // MARK: Functions
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func actionButtonTapped() {
+        let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        optionMenu.addAction(cancelAction)
+        
+        // Share image via email
+        let emailImage = { (action:UIAlertAction!) -> Void in
+            
+            let image = self.flickrPostImageView.image
+            
+            // Stored the image in a variable to be opened by the activity view controller
+            let emailImageToShare = [image!]
+            let activityViewController = UIActivityViewController(activityItems: emailImageToShare, applicationActivities: nil)
+            activityViewController.popoverPresentationController?.sourceView = self.view
+            
+            // Present the activity view controller
+            self.present(activityViewController, animated: true, completion: nil)
+        }
+        let emailImageAction = UIAlertAction(title: "Share", style: .default, handler: emailImage)
+        optionMenu.addAction(emailImageAction)
+        
+        
+        // Save image to device gallery
+        let contactUs = { (action:UIAlertAction!) -> Void in
+            UIImageWriteToSavedPhotosAlbum(self.flickrPostImageView.image!, nil, nil, nil)
+        }
+        let contactUsAction = UIAlertAction(title: "Save image", style: .default, handler: contactUs)
+        optionMenu.addAction(contactUsAction)
+        
+        
+        // Open image in browser
+        let privacyPolicy = { (action:UIAlertAction!) -> Void in
+            if let url = URL(string: self.flickrPost.link) {
+                let safariController = SFSafariViewController(url: url)
+                self.present(safariController, animated: true, completion: nil)
+            }
+        }
+        let privacyPolicyAction = UIAlertAction(title: "Open in browser", style: .default, handler: privacyPolicy)
+        optionMenu.addAction(privacyPolicyAction)
+        
+        // Show menu with the options above
+        self.present(optionMenu, animated: true, completion: nil)
     }
-    */
 
 }

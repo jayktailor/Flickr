@@ -16,4 +16,17 @@ class FlickrFeed {
     var modified: String = ""
     var generator: String = ""
     
+    
+    init(){
+        // Empty initializer
+    }
+    
+    init(title: String, link: String, description: String, modified: String, generator: String) {
+        self.title = title
+        self.link = link
+        self.description = description
+        self.modified = modified
+        self.generator = generator
+    }
+    
 }

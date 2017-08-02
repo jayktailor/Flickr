@@ -20,4 +20,20 @@ class FlickrPostItem {
     var author_id: String = ""
     var tags: String = ""
     
+    init(){
+        // Empty initializer
+    }
+    
+    init(title: String, link: String, media: String, date_taken: String, description: String, published: String, author: String, author_id: String, tags: String) {
+        self.title = title
+        self.link = link
+        self.media = media
+        self.date_taken = date_taken
+        self.description = description
+        self.published = published
+        self.author = author
+        self.author_id = author_id
+        self.tags = tags
+    }
+    
 }
