@@ -10,8 +10,15 @@ import UIKit
 
 class FlickrFeedTableViewCell: UITableViewCell {
     
-    
     @IBOutlet weak var flickrPostImageView: UIImageView!
+    @IBOutlet weak var flickrPostDescription: UILabel!
+    @IBOutlet weak var flickrPostAuthor: UILabel!
+    @IBOutlet weak var flickrPostTime: UILabel!
+    
+    
+    
+    
+    
 
     override func awakeFromNib() {
         super.awakeFromNib()

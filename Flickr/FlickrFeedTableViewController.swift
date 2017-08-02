@@ -9,17 +9,43 @@
 import UIKit
 import Kingfisher
 
-class FlickrFeedTableViewController: UITableViewController {
+class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate  {
+    @available(iOS 8.0, *)
+    func updateSearchResults(for searchController: UISearchController) {
+        //
+    }
+
     
     // MARK: Variables
     let flickrURL = "https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1" // Raw JSON required with no function wrapper. Added nojsoncallback with value 1 (https://www.flickr.com/services/api/response.json.html)
     var flickrPostItems = [FlickrPostItem]()
     var flickrFeedMetaData = FlickrFeed()
+    var searchController:UISearchController!
     
+    @IBOutlet var spinner: UIActivityIndicatorView!
 
     // MARK: Table View Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationItem.title = "Flickr"
+        
+        spinner.startAnimating()
+        
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search broadcasts..."
+        searchController.searchBar.delegate = self
+        self.definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
+        
+        // Pull To Refresh Control
+        refreshControl = UIRefreshControl()
+        refreshControl?.backgroundColor = UIColor.white
+        refreshControl?.tintColor = UIColor.gray
+        refreshControl?.addTarget(self, action: #selector(self.getFlickrData), for: UIControlEvents.valueChanged)
+        
         
         getFlickrData()
 
@@ -55,8 +81,11 @@ class FlickrFeedTableViewController: UITableViewController {
 
         let url = URL(string: value.media)!
         
-        
         cell.flickrPostImageView.kf.setImage(with: url)
+        cell.flickrPostDescription.text = value.title
+        cell.flickrPostAuthor.text = value.author
+        cell.flickrPostTime.text = value.published
+        
 
         return cell
     }
@@ -97,6 +126,9 @@ class FlickrFeedTableViewController: UITableViewController {
     }
     */
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     
     // MARK: Functions
@@ -120,11 +152,14 @@ class FlickrFeedTableViewController: UITableViewController {
                 
                 OperationQueue.main.addOperation({
                     self.tableView.reloadData()
+                    self.spinner.stopAnimating()
                 })
             }
         })
         
         task.resume()
+        
+        self.spinner.stopAnimating()
     }
     
     func parseJSONData(data: Data) -> [FlickrPostItem] {
@@ -143,10 +178,13 @@ class FlickrFeedTableViewController: UITableViewController {
             
             let jsonItems = jsonResult?["items"] as! [AnyObject]
             for jsonItem in jsonItems {
+                let newFlickrPost = FlickrPostItem()
                 
                 let media = jsonItem["media"] as! NSDictionary
+                for jsonItem in media {
+                    newFlickrPost.media = jsonItem.value as! String
+                }
                 
-                let newFlickrPost = FlickrPostItem()
                 
                 newFlickrPost.title = jsonItem["title"] as! String
                 newFlickrPost.link = jsonItem["link"] as! String
@@ -157,12 +195,12 @@ class FlickrFeedTableViewController: UITableViewController {
                 newFlickrPost.author_id = jsonItem["author_id"] as! String
                 newFlickrPost.tags = jsonItem["tags"] as! String
                 
-                for jsonItem in media {
-                    newFlickrPost.media = jsonItem.value as! String
-                }
+                
                 
                 flickrPostItems.append(newFlickrPost)
             }
+            
+            self.spinner.stopAnimating()
             
         } catch {
             print(error)
@@ -171,14 +209,22 @@ class FlickrFeedTableViewController: UITableViewController {
         return flickrPostItems
     }
     
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "showFlickrPost" {
+            if let indexPath = tableView.indexPathForSelectedRow {
+                let value = self.flickrPostItems[indexPath.row]
+                
+                let url = URL(string: value.media)!
+                
+                let destinationController = segue.destination as! FlickrPostDetailViewController
+                destinationController.flickrPostURL = url
+            }
+        }
     }
-    */
+    
 
 }
