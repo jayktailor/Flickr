@@ -1,16 +1,17 @@
 //
-//  FlickrFeedTableViewCell.swift
+//  FlickrPostDetailTableViewCell.swift
 //  Flickr
 //
-//  Created by Jay Tailor on 01/08/2017.
+//  Created by Jay Tailor on 02/08/2017.
 //  Copyright © 2017 Jay Tailor. All rights reserved.
 //
 
 import UIKit
 
-class FlickrFeedTableViewCell: UITableViewCell {
+class FlickrPostDetailTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var flickrPostImageView: UIImageView!
+    @IBOutlet weak var fieldLabel: UILabel!
+    @IBOutlet weak var valueLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
