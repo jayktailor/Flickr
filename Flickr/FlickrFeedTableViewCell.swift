@@ -8,8 +8,10 @@
 
 import UIKit
 
+/// Cell displays a Flickr image
 class FlickrFeedTableViewCell: UITableViewCell {
     
+    // MARK: TableViewCell Outlets
     @IBOutlet weak var flickrPostImageView: UIImageView!
 
     override func awakeFromNib() {

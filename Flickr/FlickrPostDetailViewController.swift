@@ -32,7 +32,7 @@ class FlickrPostDetailViewController: UIViewController, UITableViewDataSource, U
         tableView.estimatedRowHeight = 50.0
         tableView.rowHeight = UITableViewAutomaticDimension
         
-        // Set up the right button on the navigation bar
+        // Set up the right button on the navigation bar to bring up the menu
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(actionButtonTapped))
     }
 

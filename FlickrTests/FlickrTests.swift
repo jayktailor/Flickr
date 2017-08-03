@@ -11,20 +11,10 @@ import XCTest
 
 class FlickrTests: XCTestCase {
     
-    var flickrFeed: FlickrFeed!
-    var flickPostItem: FlickrPostItem!
     let flickrURL = "https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1"
-    var flickrPostItems = [FlickrPostItem]() // Array to hold the metadata for the images
-    var flickrFeedMetaData = FlickrFeed()
     
     override func setUp() {
         super.setUp()
-        
-//        flickrFeed = FlickrFeed(title: "Uploads from everyone",
-//                                link: "https:\\/\\/www.flickr.com\\/photos\\/",
-//                                description: "",
-//                                modified: "2017-08-02T14:38:01Z",
-//                                generator: "https:\\/\\/www.flickr.com")
         
         testGetFlickrData()
     }
@@ -32,11 +22,6 @@ class FlickrTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
-    }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
     func testPerformanceExample() {
@@ -57,12 +42,9 @@ class FlickrTests: XCTestCase {
             }
             
             if let data = data {
+                XCTAssert(!data.isEmpty, "Successlly retreived data from Flickr servers")
                 
-                // Load the parsed JSON data in to
                 self.testParseJSONData(data: data)
-                
-                XCTAssert(data != nil, "Success")
-                
             }
         })
         
@@ -70,22 +52,14 @@ class FlickrTests: XCTestCase {
     }
     
     func testParseJSONData(data: Data){
-        
         do {
             let jsonResult = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary
             
+            print(jsonResult!)
+            
             XCTAssert(jsonResult != nil, "Successlly parsed JSON")
-            
         } catch {
-            
             print(error.localizedDescription)
-            
-            
         }
-        
     }
-
-    
-    
-    
 }
