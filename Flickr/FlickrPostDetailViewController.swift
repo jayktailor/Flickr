@@ -20,6 +20,7 @@ class FlickrPostDetailViewController: UIViewController, UITableViewDataSource, U
     // MARK: Variables
     var flickrPostURL: URL?
     var flickrPost = FlickrPostItem()
+    let numberOfRowsInSection = 9
     
     // MARK: Table View Functions
     override func viewDidLoad() {
@@ -39,7 +40,7 @@ class FlickrPostDetailViewController: UIViewController, UITableViewDataSource, U
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 9
+        return numberOfRowsInSection
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -11,14 +11,15 @@ import Kingfisher
 
 class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate  {
     
+    // MARK: View Controller Outlets
+    @IBOutlet var spinner: UIActivityIndicatorView!
+    
     // MARK: Variables
-
     let flickrURL = "https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1" // Raw JSON required with no function wrapper. Added nojsoncallback with value 1 (https://www.flickr.com/services/api/response.json.html)
     var flickrPostItems = [FlickrPostItem]() // Array to hold the metadata for the images
     var flickrFeedMetaData = FlickrFeed() // Object to hold the metadata of the Flickr public feed (i.e. title of feed, time feed was retrieved)
     var searchController:UISearchController!
-    
-    @IBOutlet var spinner: UIActivityIndicatorView!
+    let numberOfSectionsInTable = 1
 
     // MARK: Table View Functions
     override func viewDidLoad() {
@@ -39,10 +40,15 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
         refreshControl = UIRefreshControl()
         refreshControl?.backgroundColor = UIColor.white
         refreshControl?.tintColor = UIColor.gray
-        refreshControl?.addTarget(self, action: #selector(self.getFlickrData), for: UIControlEvents.valueChanged)
+        refreshControl?.addTarget(self, action: #selector(self.refreshTable), for: UIControlEvents.valueChanged)
         
         // Initiate data retrieval
         getFlickrData()
+        
+        spinner.hidesWhenStopped = true
+        spinner.center = view.center
+        tableView.addSubview(spinner)
+        spinner.startAnimating()
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,7 +58,7 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return numberOfSectionsInTable
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -72,10 +78,6 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
         return cell
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text {
             let tagsToSearch = flickrURL + "&tags=" + searchText
@@ -84,6 +86,12 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
     }
     
     // MARK: Functions
+    
+    func refreshTable() {
+        spinner.startAnimating()
+        getFlickrData()
+        spinner.stopAnimating()
+    }
     
     func getFlickrDataByTags(searchTags: String){
         let url = URL(string: flickrURL)
@@ -100,6 +108,7 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
                 
                 OperationQueue.main.addOperation({
                     self.tableView.reloadData()
+                    
                 })
             }
         })
@@ -107,6 +116,8 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
         task.resume()
     }
 
+    
+    // Retrieve the Flickr public feed JSON
     func getFlickrData(){
         let url = URL(string: flickrURL)
         let request = URLRequest(url: url!)
@@ -119,11 +130,18 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
             
             if let data = data {
                 
-                // Load the parsed JSON data in to
+                // Load the parsed JSON data into array
                 self.flickrPostItems = self.parseJSONData(data: data)
                 
+                // Add the table reload to the operation queue. Only reloads table when JSON data has been retrieved
                 OperationQueue.main.addOperation({
                     self.tableView.reloadData()
+                    self.spinner.stopAnimating()
+                    if let refreshControl = self.refreshControl {
+                        if refreshControl.isRefreshing {
+                            refreshControl.endRefreshing()
+                        }
+                    }
                 })
             }
         })
@@ -133,20 +151,22 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
     
     func parseJSONData(data: Data) -> [FlickrPostItem] {
         
+        // New array of Flickr posts returned to populate table
         var flickrPostItems = [FlickrPostItem]()
         
         do {
             let jsonResult = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary
             
-            
+            // Save the Flickr Feed metadata
             flickrFeedMetaData.title = jsonResult?["title"] as! String
             flickrFeedMetaData.link = jsonResult?["link"] as! String
             flickrFeedMetaData.description = jsonResult?["description"] as! String
             flickrFeedMetaData.modified = jsonResult?["modified"] as! String
             flickrFeedMetaData.generator = jsonResult?["generator"] as! String
             
-            
             let jsonItems = jsonResult?["items"] as! [AnyObject]
+            
+            // Parse over the JSON and store objects in an array
             for jsonItem in jsonItems {
                 
                 // Created a new Flickr post object
