@@ -26,6 +26,7 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
         
         self.navigationItem.title = "Flickr"
         
+        // Set up the search controller
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
@@ -171,7 +172,7 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
             
         } catch {
             
-            // Show an alert if the
+            // Show an alert if there is no network connection
             let alertController = UIAlertController(title: "Could not retrive data", message: "Please check your network connection and try again", preferredStyle: .alert)
             let okayAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
             alertController.addAction(okayAction)
@@ -186,8 +187,6 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
     }
     
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showFlickrPost"{
             if let indexPath = tableView.indexPathForSelectedRow {

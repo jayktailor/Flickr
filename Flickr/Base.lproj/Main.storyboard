@@ -30,10 +30,20 @@
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l06-hY-G8S">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="299.5"/>
                                         </imageView>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron" translatesAutoresizingMaskIntoConstraints="NO" id="uvy-jX-GBA">
+                                            <rect key="frame" x="337" y="134" width="30" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="30" id="if5-vF-fpG"/>
+                                                <constraint firstAttribute="width" constant="30" id="zjE-VG-pWI"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="l06-hY-G8S" secondAttribute="trailing" id="3TU-f4-FSf"/>
+                                        <constraint firstItem="uvy-jX-GBA" firstAttribute="trailing" secondItem="ZD8-tB-a63" secondAttribute="trailingMargin" id="5Yn-FK-sqK"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="uvy-jX-GBA" secondAttribute="bottom" constant="128" id="8wQ-vU-SzJ"/>
                                         <constraint firstItem="l06-hY-G8S" firstAttribute="top" secondItem="ZD8-tB-a63" secondAttribute="top" id="Hg0-vj-ZCZ"/>
+                                        <constraint firstItem="uvy-jX-GBA" firstAttribute="top" secondItem="ZD8-tB-a63" secondAttribute="topMargin" constant="126" id="hqF-zf-PPq"/>
                                         <constraint firstItem="l06-hY-G8S" firstAttribute="leading" secondItem="ZD8-tB-a63" secondAttribute="leading" id="nkc-Lu-aaZ"/>
                                         <constraint firstAttribute="bottom" secondItem="l06-hY-G8S" secondAttribute="bottom" id="v7p-sP-K3D"/>
                                     </constraints>
@@ -167,4 +177,7 @@
             <point key="canvasLocation" x="1068" y="50.824587706146929"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="chevron" width="24" height="24"/>
+    </resources>
 </document>
