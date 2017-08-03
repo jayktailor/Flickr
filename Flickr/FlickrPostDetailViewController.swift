@@ -28,6 +28,7 @@ class FlickrPostDetailViewController: UIViewController, UITableViewDataSource, U
 
         flickrPostImageView.kf.setImage(with: flickrPostURL)
         
+        // Setting the estimated row height of the cells and allowing automatic dimentions for self-sizing cells
         tableView.estimatedRowHeight = 50.0
         tableView.rowHeight = UITableViewAutomaticDimension
         
@@ -88,6 +89,7 @@ class FlickrPostDetailViewController: UIViewController, UITableViewDataSource, U
     
     // MARK: Functions
     
+    /// Shows menu with the following options: Share, Save image, Open in browser. User can share the image via email when selecting Share.
     func actionButtonTapped() {
         let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         

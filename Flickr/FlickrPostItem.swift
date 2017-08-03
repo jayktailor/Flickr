@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// Class object holding all the metadata for the image
 class FlickrPostItem {
     
     var title: String = ""

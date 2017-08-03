@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// Class object holding all the metadata of the Flick public feed
 class FlickrFeed {
     
     var title: String = ""
