@@ -31,6 +31,7 @@ class FlickrTests: XCTestCase {
         }
     }
     
+    /// Tests whether JSON data can be retrieved from Flickr API
     func testGetFlickrData(){
         let url = URL(string: flickrURL)
         let request = URLRequest(url: url!)
@@ -51,6 +52,9 @@ class FlickrTests: XCTestCase {
         task.resume()
     }
     
+    /// Tests whether JSON data can be parsed or not
+    ///
+    /// - Parameter data: Raw JSON data
     func testParseJSONData(data: Data){
         do {
             let jsonResult = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary

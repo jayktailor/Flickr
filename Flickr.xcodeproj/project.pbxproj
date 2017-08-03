@@ -239,7 +239,6 @@
 				TargetAttributes = {
 					6CC8FF341F30AF6800B4D158 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = QSYC55K64X;
 						ProvisioningStyle = Automatic;
 					};
 					6CC8FF481F30AF6800B4D158 = {
@@ -533,7 +532,7 @@
 			baseConfigurationReference = 52F94B7682A5B054E3E58123 /* Pods-Flickr.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = QSYC55K64X;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Flickr/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jaytailor.Flickr;
@@ -547,7 +546,7 @@
 			baseConfigurationReference = 2B518744FEB423B4A510703D /* Pods-Flickr.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = QSYC55K64X;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Flickr/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jaytailor.Flickr;
