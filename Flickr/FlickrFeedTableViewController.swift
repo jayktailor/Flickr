@@ -72,7 +72,6 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return (searchController.isActive) ? self.flickrPostItemsSearch.count : self.flickrPostItems.count
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! FlickrFeedTableViewCell
@@ -245,11 +244,11 @@ class FlickrFeedTableViewController: UITableViewController, UISearchResultsUpdat
             let jsonResult = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary
             
             // Save the Flickr Feed metadata
-            flickrFeedMetaData.title = jsonResult?["title"] as! String
-            flickrFeedMetaData.link = jsonResult?["link"] as! String
-            flickrFeedMetaData.description = jsonResult?["description"] as! String
-            flickrFeedMetaData.modified = jsonResult?["modified"] as! String
-            flickrFeedMetaData.generator = jsonResult?["generator"] as! String
+            flickrFeedMetaData.title = jsonResult!["title"] as! String
+            flickrFeedMetaData.link = jsonResult!["link"] as! String
+            flickrFeedMetaData.description = jsonResult!["description"] as! String
+            flickrFeedMetaData.modified = jsonResult!["modified"] as! String
+            flickrFeedMetaData.generator = jsonResult!["generator"] as! String
             
             let jsonItems = jsonResult?["items"] as! [AnyObject]
             
